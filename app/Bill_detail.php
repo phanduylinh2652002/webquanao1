@@ -25,8 +25,8 @@ class Bill_detail extends Model
     //     return $this->belongsTo(Bill::class);
     // }
 
-    public function products(): HasMany
+    public function product()
     {
-        return $this->hasMany(Product::class, 'product_id', 'product_id');
+        return $this->belongsTo(Product::class, 'product_id', 'product_id');
     }
 }
