@@ -22,8 +22,8 @@ class Bill extends Model
 
 
     // Thach
-    public function bill_detail(): HasMany
+    public function bill_details(): HasMany
     {
-        return $this->hasMany(Bill_detail::class, 'bill_id', 'bill_id')->getQuery()->products;
+        return $this->hasMany(Bill_detail::class, 'bill_id', 'bill_id');
     }
 }
