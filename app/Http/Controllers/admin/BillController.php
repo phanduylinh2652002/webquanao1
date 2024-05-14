@@ -40,6 +40,7 @@ class BillController extends Controller
                 'bill_details.size_name'
             )
             ->get();
+         
         $bill_customer = Bill::join('customers', 'customers.customer_id', 'bills.customer_id')
             ->join('bill_details', 'bill_details.bill_id', 'bills.bill_id')
             ->where('bills.bill_id', $id)
@@ -49,7 +50,13 @@ class BillController extends Controller
                 'customers.customer_address',
                 'customers.customer_email'
             )->firstOrFail(); 
-        return view('admin.bill.detail', compact('bill_detail', 'bill_customer'));
+        $detail = Bill::find($id)->bill_details;
+        $products = [];
+        foreach ($details as $detail) {
+            $product = $detail->product;
+                $products[] = $product;
+        }
+        return view('admin.bill.detail', compact('bill_detail', 'bill_customer', 'products));
 
     }
     public function edit(Bill $bill) {
