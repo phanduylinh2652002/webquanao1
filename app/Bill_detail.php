@@ -19,14 +19,13 @@ class Bill_detail extends Model
         'price'
     ];
 
-    //Thach
     // public function bill(): BelongsTo
     // {
     //     return $this->belongsTo(Bill::class);
     // }
 
-    public function product()
+    public function product(): HasMany
     {
-        return $this->belongsTo(Product::class, 'product_id', 'product_id');
+        return $this->hasMany(Product::class, 'product_id', 'product_id');
     }
 }

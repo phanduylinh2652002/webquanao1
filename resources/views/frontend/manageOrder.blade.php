@@ -8,11 +8,18 @@
                     <h2 class="mt-5">Đơn hàng của bạn</h2>
                 </div>
                 <div class="row">
+                    @foreach($bill as $b)
                     <div class="col-md-12 col-lg-12">
-                        @foreach($bill as $b)
-                        <div class="product mt-5">
-                            <div class="card-header text-start">
+                        <div class="product mt-5 h-100">
+                            <div class="card-header d-flex justify-content-between">
                                 <h4>Mã đơn hàng: {{$b->bill_id}}</h4>
+                                @if($b->bill_status === 'Hủy đơn')
+                                    <h4 class="text-danger">{{$b->bill_status}}</h4>
+                                @elseif($b->bill_status === 'Thành công')
+                                    <h4 class="text-success">{{$b->bill_status}}</h4>
+                                @else
+                                    <h4>{{$b->bill_status}}</h4>
+                                @endif
                             </div>
                             <div class="card-body">
                                 <h5 class="text-info">Thông tin người nhận hàng</h5>
@@ -45,30 +52,33 @@
                                       </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($products as $key => $p)
-                                        {{-- @foreach($product as $p) --}}
-                                        <tr class="">
-                                                <th scope="row">{{$p[$key]['product_name']}}</th>
-                                                <td>{{$p[$key]['size_name']}}</td>
-                                                <td>{{$p[$key]['quantity']}}</td>
-                                                <td>{{$p[$key]['price']}}</td>
-                                            </tr>
-                                            {{-- @endforeach --}}
-                                            @break
-                                            @endforeach
+                                        @foreach($products[$loop->index] as $p)
+                                            @if($p->bill_id === $b->bill_id)
+                                                <tr class="">
+                                                    <th scope="row">{{$p->product_name}}</th>
+                                                    <td>{{$p->size_name}}</td>
+                                                    <td>{{$p->quantity}}</td>
+                                                    <td>{{number_format($p->price)}} đ</td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
                                     </tbody>
                                 </table>
+                                <div class="d-flex justify-content-end">
+                                    <div style="margin-right: 90px;">Tổng tiền: {{number_format($b->bill_total)}} đ</div>
+                                </div>
+                                @if($b->bill_status === 'Chờ xác nhận')
+                                <div class="text-center">
+                                    <a href="{{url('cancelOrder', $b->bill_id)}}" class="btn btn-danger">Hủy đơn</a>
+                                </div>
+                                @endif
                             </div>
                         </div>
-                        @endforeach
                     </div>
-                    <div class="col-md-12 col-lg-12 text-center mt-3">
-                        <a href="{{ url('/')}}" class="btn btn-danger mb-2 text-white">Mua tiếp</a>
-                    </div>
+                    @endforeach
                 </div> 
-                
             </div>
-        </div>
+        </div> 
    </section>
 </main>
 @endsection

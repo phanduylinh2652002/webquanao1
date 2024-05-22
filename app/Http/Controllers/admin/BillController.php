@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Customer;
 use App\Bill;
+use App\Product;
 use App\Bill_detail;
 use App\Http\Requests\CustomerRequest;
 use App\Http\Requests\BillRequest;
@@ -23,7 +24,7 @@ class BillController extends Controller
                 'bills.bill_total',
                 'bills.bill_status'
             )
-            ->paginate(5);
+            ->paginate(10);
 
         return view('admin.bill.index', compact('bills'));
     }
@@ -50,13 +51,7 @@ class BillController extends Controller
                 'customers.customer_address',
                 'customers.customer_email'
             )->firstOrFail(); 
-        $detail = Bill::find($id)->bill_details;
-        $products = [];
-        foreach ($details as $detail) {
-            $product = $detail->product;
-                $products[] = $product;
-        }
-        return view('admin.bill.detail', compact('bill_detail', 'bill_customer', 'products));
+        return view('admin.bill.detail', compact('bill_detail', 'bill_customer', 'products'));
 
     }
     public function edit(Bill $bill) {
@@ -85,7 +80,21 @@ class BillController extends Controller
     }
     public function update($id, BillRequest $request){
         // dd($request->get('bill_status'));
-        DB::transaction(function () use ($id, $request) {
+        // dd($request->all());
+        // dd($id);
+        $bills = Bill::join('bill_details', 'bill_details.bill_id', 'bills.bill_id')
+        ->join('sizes', 'sizes.size_name', 'bill_details.size_name')
+        ->where('bills.bill_id', $id)
+        ->select(
+            'bill_details.product_id',
+            'bill_details.size_name',
+            'bill_details.quantity',
+            'sizes.size_id'
+        )
+        ->get();
+        // dd($bills);
+        
+        DB::transaction(function () use ($id, $request, $bills) {
             $customer = Customer::query()->firstOrCreate([
                 'customer_email' => $request->get('customer_email'),
                 'customer_phone' => $request->get('customer_phone'),
@@ -97,6 +106,18 @@ class BillController extends Controller
             $bill = Bill::findOrFail($id);
             $bill->bill_status = $request->get('bill_status');
             $bill->save();
+
+            if($request->get('bill_status') === 'Hủy đơn'){
+                foreach($bills as $b){
+                    $product = Product::query()->findOrFail($b['product_id']);
+                    $quantity = $product->sizes()
+                    ->where('product_id', $b['product_id'])
+                    ->where('sizes.size_id', $b['size_id'])
+                    ->first();
+                    $product->sizes()->updateExistingPivot($b['size_id'], ['quantity' => $quantity->pivot->quantity+$b['quantity']]);
+
+                }
+            }
         });
 
         return redirect()->route('bill.index');

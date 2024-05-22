@@ -35,17 +35,21 @@ Route::get('/', 'PageController@getProduct');
 Route::get('category/{key}', 'PageController@getAllCategories');
 Route::match(['get', 'post'], '/detailProduct/{id_name}', 'PageController@getDetail');
 // Route::post('/detailProduct/{id}?size=', 'PageController@getDetail');
-Route::get('manageOrder', 'PageController@manageOrder');
 Route::get('search', 'PageController@search')->name('search');
+
+Route::get('manageOrder', 'PageController@manageOrder')->middleware('auth')->name('manageOrder');
+Route::get('cancelOrder/{id}', 'PageController@cancelOrder')->middleware('auth');
 Route::get('showCart', 'CartController@index');
 Route::post('up', 'CartController@up');
 Route::post('down', 'CartController@down');
 Route::post('addCart', 'CartController@cart');
 Route::match(['get', 'post'], 'remove', 'CartController@remove');
-Route::get('formCustomer', 'PaymentController@getFormCustomers');
-Route::get('formCustomerVnPay', 'VnPayController@getFormCustomersVnPay');
-Route::post('/payment', 'PaymentController@payment')->name('payment');
-Route::get('paySuccess', 'PaymentController@paySuccess')->name('paySuccess');
-Route::post('vnPayment', 'VnPayController@payment');
-Route::get('vnpay', 'VnPayController@vnpay')->name('vnpay');
+
+
+Route::get('formCustomer', 'PaymentController@getFormCustomers')->middleware('auth');
+Route::get('formCustomerVnPay', 'VnPayController@getFormCustomersVnPay')->middleware('auth');
+Route::post('/payment', 'PaymentController@payment')->name('payment')->middleware('auth');
+Route::get('paySuccess', 'PaymentController@paySuccess')->name('paySuccess')->middleware('auth');
+Route::post('vnPayment', 'VnPayController@payment')->middleware('auth');
+Route::get('vnpay', 'VnPayController@vnpay')->name('vnpay')->middleware('auth');
 

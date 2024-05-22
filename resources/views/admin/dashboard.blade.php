@@ -15,11 +15,11 @@
             <hr class="dark horizontal my-0">
             <div class="card-footer p-3">
                 @if($revenueMonthPercent > 1)
-                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{($revenueMonthPercent-1)*100}}% </span>than last month</p>
+                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{round(($revenueMonthPercent-1)*100, 2)}}% </span>than last month</p>
                 @elseif($revenueMonthPercent === 1)
-                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{$revenueMonthPercent*100}}% </span>than last month</p>
+                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{round($revenueMonthPercent*100, 2)}}% </span>than last month</p>
                 @else
-                    <p class="mb-0"><span class="text-danger text-sm font-weight-bolder">-{{(1-$revenueMonthPercent)*100}}% </span>than last month</p>
+                    <p class="mb-0"><span class="text-danger text-sm font-weight-bolder">-{{round((1-$revenueMonthPercent)*100, 2)}}% </span>than last month</p>
                 @endif
             </div>
           </div>
@@ -38,11 +38,11 @@
                 <hr class="dark horizontal my-0">
                 <div class="card-footer p-3">
                     @if($revenueWeekPercent > 1)
-                        <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{($revenueWeekPercent-1)*100}}% </span>than last week</p>
+                        <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{round(($revenueWeekPercent-1)*100, 2)}}% </span>than last week</p>
                     @elseif($revenueWeekPercent === 1)
-                        <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{$revenueWeekPercent*100}}% </span>than last week</p>
+                        <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{round($revenueWeekPercent*100, 2)}}% </span>than last week</p>
                     @else
-                        <p class="mb-0"><span class="text-danger text-sm font-weight-bolder">-{{(1-$revenueWeekPercent)*100}}% </span>than last week</p>
+                        <p class="mb-0"><span class="text-danger text-sm font-weight-bolder">-{{round((1-$revenueWeekPercent)*100, 2)}}% </span>than last week</p>
                     @endif
                 </div>
               </div>
@@ -61,11 +61,11 @@
               <hr class="dark horizontal my-0">
               <div class="card-footer p-3">
                   @if($revenueDayPercent > 1)
-                      <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{($revenueDayPercent-1)*100}}% </span>than yesterday</p>
+                      <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{round(($revenueDayPercent-1)*100, 2)}}% </span>than yesterday</p>
                   @elseif($revenueDayPercent === 1)
-                      <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{$revenueDayPercent*100}}% </span>than yesterday</p>
+                      <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{round($revenueDayPercent*100, 2)}}% </span>than yesterday</p>
                   @else
-                      <p class="mb-0"><span class="text-danger text-sm font-weight-bolder">-{{(1-$revenueDayPercent)*100}}% </span>than yesterday</p>
+                      <p class="mb-0"><span class="text-danger text-sm font-weight-bolder">-{{round((1-$revenueDayPercent)*100, 2)}}% </span>than yesterday</p>
                   @endif
               </div>
             </div>
